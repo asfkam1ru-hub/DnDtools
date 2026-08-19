@@ -36,6 +36,7 @@ class Character(BaseModel):
     max_hp: int = Field(..., gt=0)          # must be positive
     hp: int = Field(..., ge=0)              # can be 0 (unconscious), never negative
     inventory: list[str] = Field(default_factory=list)
+    skills: list[str] = Field(default_factory=list)
 
     # --- Ability Scores ---
     # D&D ability scores range 1–30 (20 is typical human max; 30 is theoretical cap).
