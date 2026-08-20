@@ -29,7 +29,7 @@ This phase defines the character domain and connects it to validated API and per
 - [ ] 2.6 Character API Schemas
 - [x] 2.7 Character CRUD API
 - [x] 2.8 Persistence
-- [ ] 2.9 Validation and Error Handling
+- [x] 2.9 Validation and Error Handling
 - [ ] 2.10 Character Tests
 
 ## 3. AI Tools

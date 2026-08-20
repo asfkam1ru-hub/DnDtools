@@ -10,8 +10,16 @@ WHY this file exists:
 
 from uuid import UUID
 
-from fastapi import FastAPI, HTTPException, Response, status
+from fastapi import FastAPI, Request, Response, status
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from pydantic import ValidationError
 
+from app.errors import (
+    CharacterNotFoundError,
+    character_not_found_handler,
+    validation_error_response,
+)
 from app.models.character import Character
 from app.persistence.db import create_engine_for_url, create_session_factory
 from app.persistence.models import Base
@@ -29,6 +37,16 @@ engine = create_engine_for_url()
 session_factory = create_session_factory(engine)
 Base.metadata.create_all(bind=engine)
 character_repository = CharacterRepository(session_factory)
+
+app.add_exception_handler(CharacterNotFoundError, character_not_found_handler)
+
+
+@app.exception_handler(RequestValidationError)
+async def request_validation_handler(
+    _request: Request,
+    exc: RequestValidationError,
+):
+    return validation_error_response(exc.errors())
 
 
 @app.get("/")
@@ -76,10 +94,7 @@ def get_character(character_id: UUID) -> CharacterResponse:
     """Return one character by id or 404."""
     character = character_repository.get(character_id)
     if character is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Character not found",
-        )
+        raise CharacterNotFoundError()
     return CharacterResponse.model_validate(character)
 
 
@@ -87,27 +102,26 @@ def get_character(character_id: UUID) -> CharacterResponse:
 def update_character(
     character_id: UUID,
     character_update: CharacterUpdate,
-) -> CharacterResponse:
+) -> CharacterResponse | JSONResponse:
     """Patch only provided fields while preserving Character invariants."""
     existing_character = character_repository.get(character_id)
     if existing_character is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Character not found",
-        )
+        raise CharacterNotFoundError()
 
     updated_values = character_update.model_dump(exclude_unset=True)
     merged_payload = existing_character.model_dump() | updated_values
 
-    # Re-validate with full domain model to preserve all constraints, including
-    # cross-field hp <= max_hp even when only one related field is patched.
-    updated_character = Character(**merged_payload)
+    # Locally convert expected domain validation failures to the shared 422
+    # contract. Do not register a global ValidationError handler — unexpected
+    # Pydantic errors elsewhere should remain server failures.
+    try:
+        updated_character = Character(**merged_payload)
+    except ValidationError as exc:
+        return validation_error_response(exc.errors())
+
     persisted = character_repository.update(updated_character)
     if persisted is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Character not found",
-        )
+        raise CharacterNotFoundError()
     return CharacterResponse.model_validate(persisted)
 
 
@@ -116,8 +130,5 @@ def delete_character(character_id: UUID) -> Response:
     """Delete character by id or return 404."""
     deleted = character_repository.delete(character_id)
     if not deleted:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Character not found",
-        )
+        raise CharacterNotFoundError()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
