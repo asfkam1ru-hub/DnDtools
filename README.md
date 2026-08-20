@@ -14,16 +14,24 @@ The backend applies those actions to real app data. That is the core product ide
 
 ## Current status
 
-**Stage 1 — foundation only.** Minimal FastAPI backend skeleton. No database,
-auth, frontend UI, maps, or AI agent yet.
+**Phase 2 — Characters (in progress).** Character CRUD API is implemented:
+
+- `POST /characters`
+- `GET /characters`
+- `GET /characters/{character_id}`
+- `PATCH /characters/{character_id}`
+- `DELETE /characters/{character_id}`
+
+Character data is persisted with **SQLAlchemy + SQLite** and survives application
+restarts. Step 2.9 (validation/error handling hardening) is not implemented yet.
 
 ## Stack (planned / partial)
 
 | Layer | Technology |
 | --- | --- |
-| Backend | Python, FastAPI, Uvicorn |
+| Backend | Python, FastAPI, Uvicorn, SQLAlchemy |
 | Frontend | React / Next.js (later) |
-| Database | TBD (later) |
+| Database | SQLite (local persistence) |
 | AI | LLM API + tool calling (later) |
 | Realtime | WebSocket (later) |
 
@@ -32,12 +40,16 @@ auth, frontend UI, maps, or AI agent yet.
 - Project docs (`README.md`, `ROADMAP.md`, `docs/architecture.md`)
 - Safe env template (`.env.example`)
 - Backend app with `GET /` and `GET /health`
-- Placeholder folders for frontend and tests
+- Validated `Character` model with:
+  - ability scores (`strength`, `dexterity`, `constitution`, `intelligence`,
+    `wisdom`, `charisma`) constrained to `1..30`
+  - HP rules (`max_hp > 0`, `hp >= 0`, and `hp <= max_hp`)
+  - `inventory` and `skills` as per-character lists
+- Character CRUD API backed by SQLAlchemy + SQLite persistence
+- Character model and CRUD tests
+- Placeholder frontend folder
 
-## Local run (Mac, Apple Silicon) — do this later
-
-Do **not** run these yet if you are still on Stage 1 setup instructions that
-forbid installs. When you are ready:
+## Local run (Mac, Apple Silicon)
 
 ```bash
 cd backend
@@ -52,3 +64,11 @@ Then open:
 - http://127.0.0.1:8000/
 - http://127.0.0.1:8000/health
 - http://127.0.0.1:8000/docs
+
+## Tests
+
+From the project root, with dependencies installed:
+
+```bash
+PYTHONPATH=backend backend/.venv/bin/python -m unittest discover -s tests -v
+```

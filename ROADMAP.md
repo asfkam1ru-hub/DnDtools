@@ -27,8 +27,8 @@ This phase defines the character domain and connects it to validated API and per
 - [x] 2.4 Inventory
 - [x] 2.5 Skills
 - [ ] 2.6 Character API Schemas
-- [ ] 2.7 Character CRUD API
-- [ ] 2.8 Persistence
+- [x] 2.7 Character CRUD API
+- [x] 2.8 Persistence
 - [ ] 2.9 Validation and Error Handling
 - [ ] 2.10 Character Tests
 
