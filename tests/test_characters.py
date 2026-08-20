@@ -220,6 +220,151 @@ class CharacterHTTPTests(unittest.TestCase):
         route = next(route for route in app.routes if route.path == "/characters")
         self.assertIn("POST", route.methods)
 
+    def test_level_boundaries(self):
+        cases = [
+            (1, 201),
+            (20, 201),
+            (0, 422),
+            (21, 422),
+        ]
+        for level, expected_status in cases:
+            with self.subTest(level=level, expected_status=expected_status):
+                payload = {**VALID_CHARACTER_DATA, "level": level}
+                response = self.client.post("/characters", json=payload)
+                self.assertEqual(response.status_code, expected_status)
+                if expected_status == 422:
+                    assert_error_contract(
+                        self,
+                        response.json(),
+                        code="validation_error",
+                        message="Request validation failed",
+                    )
+
+    def test_strength_boundaries(self):
+        cases = [
+            (1, 201),
+            (30, 201),
+            (0, 422),
+            (31, 422),
+        ]
+        for strength, expected_status in cases:
+            with self.subTest(strength=strength, expected_status=expected_status):
+                payload = {**VALID_CHARACTER_DATA, "strength": strength}
+                response = self.client.post("/characters", json=payload)
+                self.assertEqual(response.status_code, expected_status)
+                if expected_status == 422:
+                    assert_error_contract(
+                        self,
+                        response.json(),
+                        code="validation_error",
+                        message="Request validation failed",
+                    )
+
+    def test_health_validation_on_post(self):
+        cases = [
+            ({"max_hp": 0, "hp": 0}, "max_hp_zero"),
+            ({"hp": -1}, "negative_hp"),
+            ({"max_hp": 10, "hp": 11}, "hp_above_max_hp"),
+        ]
+        for overrides, label in cases:
+            with self.subTest(case=label):
+                payload = {**VALID_CHARACTER_DATA, **overrides}
+                response = self.client.post("/characters", json=payload)
+                self.assertEqual(response.status_code, 422)
+                assert_error_contract(
+                    self,
+                    response.json(),
+                    code="validation_error",
+                    message="Request validation failed",
+                )
+
+    def test_required_and_extra_fields_on_post(self):
+        missing_name = {k: v for k, v in VALID_CHARACTER_DATA.items() if k != "name"}
+        cases = [
+            (missing_name, "missing_name"),
+            ({**VALID_CHARACTER_DATA, "name": ""}, "empty_name"),
+            (
+                {
+                    **VALID_CHARACTER_DATA,
+                    "id": "123e4567-e89b-12d3-a456-426614174000",
+                },
+                "client_supplied_id",
+            ),
+        ]
+        for payload, label in cases:
+            with self.subTest(case=label):
+                response = self.client.post("/characters", json=payload)
+                self.assertEqual(response.status_code, 422)
+                assert_error_contract(
+                    self,
+                    response.json(),
+                    code="validation_error",
+                    message="Request validation failed",
+                )
+
+    def test_patch_empty_body_leaves_character_unchanged(self):
+        create_response = self.client.post("/characters", json=VALID_CHARACTER_DATA)
+        created = create_response.json()
+
+        patch_response = self.client.patch(
+            f"/characters/{created['id']}",
+            json={},
+        )
+
+        self.assertEqual(patch_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(patch_response.json(), created)
+
+    def test_patch_max_hp_below_existing_hp_returns_422(self):
+        create_response = self.client.post("/characters", json=VALID_CHARACTER_DATA)
+        created_id = create_response.json()["id"]
+
+        # Existing hp is 12; lowering max_hp alone must violate hp <= max_hp.
+        response = self.client.patch(
+            f"/characters/{created_id}",
+            json={"max_hp": 5},
+        )
+
+        self.assertEqual(response.status_code, 422)
+        assert_error_contract(
+            self,
+            response.json(),
+            code="validation_error",
+            message="Request validation failed",
+        )
+
+    def test_patch_unknown_field_returns_422(self):
+        create_response = self.client.post("/characters", json=VALID_CHARACTER_DATA)
+        created_id = create_response.json()["id"]
+
+        response = self.client.patch(
+            f"/characters/{created_id}",
+            json={"unknown_field": "nope"},
+        )
+
+        self.assertEqual(response.status_code, 422)
+        assert_error_contract(
+            self,
+            response.json(),
+            code="validation_error",
+            message="Request validation failed",
+        )
+
+    def test_inventory_and_skills_round_trip(self):
+        payload = {
+            **VALID_CHARACTER_DATA,
+            "inventory": ["Longsword", "Potion"],
+            "skills": ["Arcana", "Stealth"],
+        }
+        create_response = self.client.post("/characters", json=payload)
+        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
+        created_id = create_response.json()["id"]
+
+        get_response = self.client.get(f"/characters/{created_id}")
+        self.assertEqual(get_response.status_code, status.HTTP_200_OK)
+        body = get_response.json()
+        self.assertEqual(body["inventory"], ["Longsword", "Potion"])
+        self.assertEqual(body["skills"], ["Arcana", "Stealth"])
+
 
 if __name__ == "__main__":
     unittest.main()
