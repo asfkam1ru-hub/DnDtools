@@ -34,14 +34,20 @@ This phase defines the character domain and connects it to validated API and per
 
 ## 3. AI Tools
 
-This phase isolates LLM providers behind services and creates a validated pipeline for structured tool execution. After completion, the AI agent can safely propose and perform approved changes to game objects.
+This phase isolates LLM providers behind services and creates a validated pipeline
+for structured tool execution. After completion, the AI agent can safely propose
+and perform approved changes to game objects.
+
+Entity-specific tools beyond Character are added only after their corresponding
+domain models and persistence exist. Phase 3 builds the shared tool infrastructure
+using Character Tools as the first concrete implementation.
 
 - [x] 3.1 LLM Configuration
 - [x] 3.2 LLM Service
-- [ ] 3.3 AI Provider Abstraction
-- [ ] 3.4 Tool Schema
-- [ ] 3.5 Character Tools
-- [ ] 3.6 Game Object Tools
+- [x] 3.3 AI Provider Abstraction
+- [x] 3.4 Tool Schema
+- [x] 3.5 Character Tools
+- [ ] 3.6 Tool Registry and Binding
 - [ ] 3.7 Tool Validation
 - [ ] 3.8 Safe Execution Pipeline
 - [ ] 3.9 Agent Service
@@ -49,7 +55,10 @@ This phase isolates LLM providers behind services and creates a validated pipeli
 
 ## 4. Story and Dialogs
 
-This phase introduces persistent story entities, conversations, and structured narrative state. After completion, campaigns can contain scenes, NPCs, dialog history, and AI-assisted narration.
+This phase introduces persistent story entities, conversations, and structured
+narrative state. After completion, campaigns can contain scenes, NPCs, dialog
+history, and AI-assisted narration. Structured state updates and tools for
+Campaign, Scene, and NPC belong here once those domain models exist.
 
 - [ ] 4.1 Campaign Model
 - [ ] 4.2 Scene Model
@@ -64,7 +73,10 @@ This phase introduces persistent story entities, conversations, and structured n
 
 ## 5. Maps and Tokens
 
-This phase models spatial game state and exposes controlled map operations through backend and frontend interfaces. After completion, users can place linked tokens, move them according to rules, and share map state.
+This phase models spatial game state and exposes controlled map operations through
+backend and frontend interfaces. After completion, users can place linked tokens,
+move them according to rules, and share map state. Map and Token tools belong here
+once those domain models exist.
 
 - [ ] 5.1 Map Model
 - [ ] 5.2 Map API

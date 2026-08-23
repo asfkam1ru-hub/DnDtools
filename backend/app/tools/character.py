@@ -9,6 +9,7 @@ from uuid import UUID
 
 from app.models.character import Character
 from app.persistence.repository import CharacterRepository
+from app.tools.registry import ToolBinding
 from app.tools.schema import ToolDefinition
 
 
@@ -202,6 +203,21 @@ class CharacterTools:
             ) from exc
 
 
+def character_tool_bindings(tools: CharacterTools) -> tuple[ToolBinding, ...]:
+    """
+    Explicitly pair Character ToolDefinitions with CharacterTools handlers.
+
+    Bindings are built without reflection so renames stay visible at edit time.
+    """
+    return (
+        ToolBinding(GET_CHARACTER_TOOL, tools.get_character),
+        ToolBinding(LIST_CHARACTERS_TOOL, tools.list_characters),
+        ToolBinding(CREATE_CHARACTER_TOOL, tools.create_character),
+        ToolBinding(UPDATE_CHARACTER_TOOL, tools.update_character),
+        ToolBinding(DELETE_CHARACTER_TOOL, tools.delete_character),
+    )
+
+
 __all__ = [
     "CHARACTER_TOOL_DEFINITIONS",
     "CREATE_CHARACTER_TOOL",
@@ -213,4 +229,5 @@ __all__ = [
     "GET_CHARACTER_TOOL",
     "LIST_CHARACTERS_TOOL",
     "UPDATE_CHARACTER_TOOL",
+    "character_tool_bindings",
 ]
