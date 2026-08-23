@@ -37,7 +37,7 @@ This phase defines the character domain and connects it to validated API and per
 This phase isolates LLM providers behind services and creates a validated pipeline for structured tool execution. After completion, the AI agent can safely propose and perform approved changes to game objects.
 
 - [x] 3.1 LLM Configuration
-- [ ] 3.2 LLM Service
+- [x] 3.2 LLM Service
 - [ ] 3.3 AI Provider Abstraction
 - [ ] 3.4 Tool Schema
 - [ ] 3.5 Character Tools
