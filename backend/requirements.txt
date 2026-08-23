@@ -2,3 +2,4 @@ fastapi
 uvicorn
 sqlalchemy
 httpx2
+pydantic-settings
