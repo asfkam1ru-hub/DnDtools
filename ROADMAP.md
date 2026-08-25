@@ -50,7 +50,7 @@ using Character Tools as the first concrete implementation.
 - [x] 3.6 Tool Registry and Binding
 - [x] 3.7 Tool Validation
 - [x] 3.8 Safe Execution Pipeline
-- [ ] 3.9 Agent Service
+- [x] 3.9 Agent Service
 - [ ] 3.10 AI Integration Tests
 
 ## 4. Story and Dialogs

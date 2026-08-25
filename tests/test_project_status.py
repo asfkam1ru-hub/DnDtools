@@ -111,9 +111,9 @@ class RealRoadmapVerifiedStateTests(unittest.TestCase):
     def test_total_numbered_steps_is_70(self):
         self.assertEqual(len(self.steps), 70)
 
-    def test_completed_numbered_steps_is_28(self):
+    def test_completed_numbered_steps_is_29(self):
         completed = sum(1 for step in self.steps if step.completed)
-        self.assertEqual(completed, 28)
+        self.assertEqual(completed, 29)
 
     def test_phase_1_complete(self):
         phase = self.phases[1]
@@ -123,16 +123,16 @@ class RealRoadmapVerifiedStateTests(unittest.TestCase):
         phase = self.phases[2]
         self.assertEqual((phase.completed, phase.total), (10, 10))
 
-    def test_phase_3_is_8_of_10(self):
+    def test_phase_3_is_9_of_10(self):
         phase = self.phases[3]
-        self.assertEqual((phase.completed, phase.total), (8, 10))
+        self.assertEqual((phase.completed, phase.total), (9, 10))
 
-    def test_next_incomplete_is_agent_service(self):
+    def test_next_incomplete_is_ai_integration_tests(self):
         nxt = next_incomplete(self.steps)
         self.assertIsNotNone(nxt)
         self.assertEqual(nxt.phase, 3)
-        self.assertEqual(nxt.step, 9)
-        self.assertEqual(nxt.title, "Agent Service")
+        self.assertEqual(nxt.step, 10)
+        self.assertEqual(nxt.title, "AI Integration Tests")
 
 
 if __name__ == "__main__":
