@@ -1,0 +1,40 @@
+---
+description: Development workflow for AI-assisted roadmap work
+alwaysApply: true
+---
+
+# Workflow
+
+## Before implementation
+
+1. Audit relevant files and current branch state.
+2. Work from an explicit roadmap step and/or `tasks/...` task spec.
+3. Confirm working tree expectations for the task.
+
+## During implementation
+
+- Change only what the task requires.
+- Do not expand into unrelated refactors.
+- Preserve architecture boundaries documented in project rules.
+
+## After changes
+
+- Run `make audit` (or at least `make check`) before claiming done.
+- Inspect `git status` / `git diff` yourself or via the audit report.
+
+## Git safety
+
+- Never `git add`, `git commit`, or `git push` unless the user explicitly asks.
+- Never expose or commit `.env` / secrets.
+- Never silently mark numbered ROADMAP steps complete.
+- Roadmap completion must reflect verified reality, not an AI “done” claim.
+
+## Branching
+
+Prefer isolated branches:
+
+- `feat/<step>-<slug>`
+- `fix/<slug>`
+- `chore/<slug>`
+
+Do not land feature work directly on `main`.
