@@ -6,16 +6,16 @@ Sequential stages. Finish one before starting the next.
 
 This phase establishes the backend structure, configuration, observability, error boundaries, tests, and development standards. After completion, the project has a reliable FastAPI foundation on which every product feature can be built.
 
-- [ ] 1.1 Audit проекта
-- [ ] 1.2 Virtual Environment
-- [ ] 1.3 Dependencies
-- [ ] 1.4 FastAPI
-- [ ] 1.5 Configuration
-- [ ] 1.6 Application Structure
-- [ ] 1.7 Logging
-- [ ] 1.8 Error Handling
-- [ ] 1.9 Basic Tests
-- [ ] 1.10 Documentation and Standards
+- [x] 1.1 Audit проекта
+- [x] 1.2 Virtual Environment
+- [x] 1.3 Dependencies
+- [x] 1.4 FastAPI
+- [x] 1.5 Configuration
+- [x] 1.6 Application Structure
+- [x] 1.7 Logging
+- [x] 1.8 Error Handling
+- [x] 1.9 Basic Tests
+- [x] 1.10 Documentation and Standards
 
 ## 2. Characters
 
@@ -26,7 +26,7 @@ This phase defines the character domain and connects it to validated API and per
 - [x] 2.3 Health
 - [x] 2.4 Inventory
 - [x] 2.5 Skills
-- [ ] 2.6 Character API Schemas
+- [x] 2.6 Character API Schemas
 - [x] 2.7 Character CRUD API
 - [x] 2.8 Persistence
 - [x] 2.9 Validation and Error Handling
@@ -47,9 +47,9 @@ using Character Tools as the first concrete implementation.
 - [x] 3.3 AI Provider Abstraction
 - [x] 3.4 Tool Schema
 - [x] 3.5 Character Tools
-- [ ] 3.6 Tool Registry and Binding
-- [ ] 3.7 Tool Validation
-- [ ] 3.8 Safe Execution Pipeline
+- [x] 3.6 Tool Registry and Binding
+- [x] 3.7 Tool Validation
+- [x] 3.8 Safe Execution Pipeline
 - [ ] 3.9 Agent Service
 - [ ] 3.10 AI Integration Tests
 
@@ -118,3 +118,19 @@ This phase adds identity, authorization, tenancy, billing, usage controls, and p
 - [ ] 7.8 Usage Limits
 - [ ] 7.9 Deployment and Monitoring
 - [ ] 7.10 Product Packaging
+
+## Development Automation
+
+Engineering infrastructure for quality gates, AI coding workflow, and CI.
+These checklist items are **excluded** from the MVP numbered-step denominator
+used by `make progress` / `scripts/project_status.py`.
+
+- [x] Unified Makefile quality gates
+- [x] Architecture checks
+- [x] Repository AI rules
+- [x] Automated progress reporting
+- [x] Git hooks
+- [x] GitHub Actions CI
+- [x] Definition of Done
+- [x] Feature branch workflow
+- [x] Task specification workflow

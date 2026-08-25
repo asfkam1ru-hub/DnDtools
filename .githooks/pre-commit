@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Fast pre-commit gate: whitespace, compile, architecture.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+echo "[pre-commit] git diff --check --cached"
+git diff --check --cached
+
+echo "[pre-commit] make compile"
+make compile
+
+echo "[pre-commit] make architecture"
+make architecture
+
+echo "[pre-commit] ok"

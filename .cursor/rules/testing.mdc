@@ -1,0 +1,24 @@
+---
+description: Testing standards for roadmap and bugfix work
+alwaysApply: true
+---
+
+# Testing
+
+## Requirements
+
+- Every behavior change needs tests.
+- The full suite must remain green (`make test` / `make check`).
+- Bug fixes require a regression test that fails before the fix when practical.
+
+## Constraints
+
+- Prefer local, deterministic tests.
+- No network / OpenAI calls unless the task explicitly requires network integration tests.
+- Avoid flaky timing or order-dependent assertions.
+
+## Scope
+
+- Unit tests for pure logic and contracts.
+- Integration-style tests for persistence/tools may use temporary SQLite.
+- Do not weaken architecture or safety tests to make a change pass.

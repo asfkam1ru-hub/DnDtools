@@ -1,0 +1,25 @@
+---
+description: AI tooling layer boundaries (schema/registry/validation/execution/agent)
+globs: backend/app/tools/**/*.py,backend/app/services/**/*.py,backend/app/providers/**/*.py
+alwaysApply: false
+---
+
+# AI Tools Boundaries
+
+## Current layers
+
+| Layer | Responsibility | Must not |
+| --- | --- | --- |
+| `ToolDefinition` | Schema / contract only | Execute handlers, call providers |
+| `ToolRegistry` | Store `ToolBinding` only | Call handlers, validate args |
+| `ToolValidator` | Validate `tool_name` + raw args | Call handlers, invoke tools |
+| `ToolExecutor` | Validate → resolve binding → invoke once → JSON-safe result | Import Character/OpenAI/FastAPI; swallow unexpected exceptions |
+| `AgentService` | Future orchestration between LLM and tools | Live in provider or registry layers |
+| Provider | Vendor API only | Own tool registry/execution policy |
+
+## Rules
+
+- No lower generic tool layer imports a higher orchestration layer or concrete domain tool class.
+- No OpenAI-specific fields in generic tool execution results.
+- Unknown tools and invalid arguments must not invoke handlers.
+- Unexpected programming errors must propagate (or be wrapped without losing cause) — never silently converted to success=False via bare `except Exception`.

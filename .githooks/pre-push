@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Pre-push gate: CI-authoritative checks.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+echo "[pre-push] make ci"
+make ci
+
+echo "[pre-push] ok"

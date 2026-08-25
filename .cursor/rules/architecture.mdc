@@ -1,0 +1,41 @@
+---
+description: Layered architecture and dependency direction for DnDpetProject
+alwaysApply: true
+---
+
+# Architecture
+
+## Layering
+
+Prefer clear layers:
+
+1. HTTP / API (FastAPI routes, schemas)
+2. Application / services (orchestration)
+3. Domain models (Pydantic / business rules)
+4. Persistence (repositories, SQLAlchemy)
+5. Providers (vendor SDKs such as OpenAI)
+
+Dependencies point **inward/downward**. Lower layers must not import higher layers.
+
+## Boundaries
+
+- Infrastructure (providers, DB engines, frameworks) must not leak into domain models.
+- Generic AI tooling (`schema`, `registry`, `validation`, `execution`) must stay **domain-neutral**.
+- Concrete entity tools (e.g. Character) may depend on repositories/domain; generic tooling must not.
+
+## Safety rules
+
+- No reflection-based dispatch (`getattr`/`eval`/`globals`) to select callables.
+- Call only explicitly registered bindings.
+- Do not swallow unexpected errors with broad `except Exception` at tool execution boundaries.
+- Expected domain/tool failures use explicit typed errors and predictable contracts.
+
+## Dependency direction (AI stack)
+
+```
+Provider  ->  LLMService  ->  AgentService (future)
+ToolDefinition / Registry / Validator / Executor  <-  AgentService (future)
+CharacterTools  ->  CharacterRepository / Character domain
+```
+
+Generic tool layers must not import Character tools, repositories, FastAPI, or providers.
