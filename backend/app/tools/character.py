@@ -9,12 +9,13 @@ from uuid import UUID
 
 from app.models.character import Character
 from app.persistence.repository import CharacterRepository
+from app.tools.errors import ToolHandlerError
 from app.tools.registry import ToolBinding
 from app.tools.schema import ToolDefinition
 
 
-class CharacterToolError(Exception):
-    """Base error for Character tool handlers."""
+class CharacterToolError(ToolHandlerError):
+    """Base expected error for Character tool handlers."""
 
 
 class CharacterToolInputError(CharacterToolError):
