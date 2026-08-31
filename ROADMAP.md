@@ -64,7 +64,7 @@ mechanics are preserved inside a system-specific profile boundary, while the
 base Character becomes system-independent and ready for future RPG systems.
 
 - [x] 4.1 Current Core Delta Audit
-- [ ] 4.2 Base Character Domain Refactor
+- [x] 4.2 Base Character Domain Refactor
 - [ ] 4.3 D&D Character Profile Extraction
 - [ ] 4.4 Character Persistence Refactor
 - [ ] 4.5 Character API and Schemas Alignment
