@@ -121,6 +121,7 @@ class AgentServiceTests(unittest.TestCase):
                     content="Calling tool",
                     tool_call=ToolCallProposal(
                         name="demo_tool",
+                        call_id="call_demo_1",
                         arguments={"character_id": "abc"},
                     ),
                 ),
@@ -147,6 +148,7 @@ class AgentServiceTests(unittest.TestCase):
         second_messages = model.calls[1][0]
         self.assertEqual(second_messages[-1].role, "tool")
         self.assertEqual(second_messages[-1].tool_name, "demo_tool")
+        self.assertEqual(second_messages[-1].tool_call_id, "call_demo_1")
 
     def test_tool_validation_failure_does_not_invoke_handler(self):
         handler = MagicMock(return_value={"ok": True})
@@ -157,6 +159,7 @@ class AgentServiceTests(unittest.TestCase):
                     content="Bad args",
                     tool_call=ToolCallProposal(
                         name="demo_tool",
+                        call_id="call_demo_bad",
                         arguments={"character_id": 123},
                     ),
                 ),
@@ -185,6 +188,7 @@ class AgentServiceTests(unittest.TestCase):
                     content="Try tool",
                     tool_call=ToolCallProposal(
                         name="demo_tool",
+                        call_id="call_demo_1",
                         arguments={"character_id": "abc"},
                     ),
                 ),
@@ -210,6 +214,7 @@ class AgentServiceTests(unittest.TestCase):
                     content="Try tool",
                     tool_call=ToolCallProposal(
                         name="demo_tool",
+                        call_id="call_demo_1",
                         arguments={"character_id": "abc"},
                     ),
                 ),
@@ -230,6 +235,7 @@ class AgentServiceTests(unittest.TestCase):
                     content="First",
                     tool_call=ToolCallProposal(
                         name="demo_tool",
+                        call_id="call_demo_one",
                         arguments={"character_id": "one"},
                     ),
                 ),
@@ -237,6 +243,7 @@ class AgentServiceTests(unittest.TestCase):
                     content="Second proposal blocked",
                     tool_call=ToolCallProposal(
                         name="demo_tool",
+                        call_id="call_demo_two",
                         arguments={"character_id": "two"},
                     ),
                 ),
@@ -266,6 +273,7 @@ class AgentServiceTests(unittest.TestCase):
                     content="Unknown",
                     tool_call=ToolCallProposal(
                         name="missing_tool",
+                        call_id="call_missing",
                         arguments={},
                     ),
                 ),
@@ -353,6 +361,7 @@ class CharacterAgentIntegrationTests(unittest.TestCase):
                     content="Creating character",
                     tool_call=ToolCallProposal(
                         name="create_character",
+                        call_id="call_create_1",
                         arguments=VALID_CREATE_ARGS,
                     ),
                 ),
