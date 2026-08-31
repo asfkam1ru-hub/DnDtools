@@ -1,5 +1,7 @@
 # Roadmap — DnD AI Game Platform
 
+## Phase 1 — Core Platform Foundation
+
 Sequential stages. Finish one before starting the next.
 
 ## 1. Foundation
@@ -53,71 +55,24 @@ using Character Tools as the first concrete implementation.
 - [x] 3.9 Agent Service
 - [x] 3.10 AI Integration Tests
 
-## 4. Story and Dialogs
+## 4. Existing Core Alignment
 
-This phase introduces persistent story entities, conversations, and structured
-narrative state. After completion, campaigns can contain scenes, NPCs, dialog
-history, and AI-assisted narration. Structured state updates and tools for
-Campaign, Scene, and NPC belong here once those domain models exist.
+This stage aligns the already implemented Character and AI-tool integration
+with the new multi-system product model without rebuilding the completed
+Stages 1–3 foundation. After completion, the existing D&D-specific character
+mechanics are preserved inside a system-specific profile boundary, while the
+base Character becomes system-independent and ready for future RPG systems.
 
-- [ ] 4.1 Campaign Model
-- [ ] 4.2 Scene Model
-- [ ] 4.3 NPC Model
-- [ ] 4.4 Message Model
-- [ ] 4.5 Conversation History
-- [ ] 4.6 Scene API
-- [ ] 4.7 Dialog API
-- [ ] 4.8 Structured State Updates
-- [ ] 4.9 Agent Narration
-- [ ] 4.10 Story and Dialog Tests
-
-## 5. Maps and Tokens
-
-This phase models spatial game state and exposes controlled map operations through
-backend and frontend interfaces. After completion, users can place linked tokens,
-move them according to rules, and share map state. Map and Token tools belong here
-once those domain models exist.
-
-- [ ] 5.1 Map Model
-- [ ] 5.2 Map API
-- [ ] 5.3 Token Model
-- [ ] 5.4 Token Positions
-- [ ] 5.5 Character/NPC Token Links
-- [ ] 5.6 Movement Rules
-- [ ] 5.7 Visibility Rules
-- [ ] 5.8 Map State API
-- [ ] 5.9 Frontend Map Integration
-- [ ] 5.10 Map and Token Tests
-
-## 6. Multiplayer
-
-This phase adds realtime sessions, synchronized state, recovery, and role-based game permissions. After completion, a GM and multiple players can participate safely in the same live game.
-
-- [ ] 6.1 Game Session Model
-- [ ] 6.2 Player Model
-- [ ] 6.3 Session API
-- [ ] 6.4 WebSocket Infrastructure
-- [ ] 6.5 State Synchronization
-- [ ] 6.6 Player Roles
-- [ ] 6.7 GM Permissions
-- [ ] 6.8 Player Permissions
-- [ ] 6.9 Reconnection and Session Recovery
-- [ ] 6.10 Multiplayer Tests
-
-## 7. SaaS and Monetization
-
-This phase adds identity, authorization, tenancy, billing, usage controls, and production operations around the application. After completion, the platform can be deployed, monitored, packaged, and offered as a controlled SaaS product.
-
-- [ ] 7.1 Authentication
-- [ ] 7.2 Users
-- [ ] 7.3 Organizations / Workspaces
-- [ ] 7.4 Authorization
-- [ ] 7.5 Subscription Model
-- [ ] 7.6 Billing Integration
-- [ ] 7.7 AI Usage Tracking
-- [ ] 7.8 Usage Limits
-- [ ] 7.9 Deployment and Monitoring
-- [ ] 7.10 Product Packaging
+- [x] 4.1 Current Core Delta Audit
+- [ ] 4.2 Base Character Domain Refactor
+- [ ] 4.3 D&D Character Profile Extraction
+- [ ] 4.4 Character Persistence Refactor
+- [ ] 4.5 Character API and Schemas Alignment
+- [ ] 4.6 Character Tools Alignment
+- [ ] 4.7 Character Lifecycle Alignment
+- [ ] 4.8 Character Import / Export
+- [ ] 4.9 Existing Character Tests Migration
+- [ ] 4.10 Core Alignment Integration Tests
 
 ## Development Automation
 
