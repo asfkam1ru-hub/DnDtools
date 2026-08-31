@@ -13,37 +13,27 @@ from __future__ import annotations
 import json
 from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Protocol
 
+from app.agent.contracts import (
+    AgentMessage,
+    AgentModel,
+    AgentModelResponse,
+    ToolCallProposal,
+)
 from app.services.llm import LLMService
 from app.tools.execution import ToolExecutionResult, ToolExecutor
 from app.tools.schema import ToolDefinition
 
-
-@dataclass(frozen=True)
-class ToolCallProposal:
-    """Provider-neutral request to invoke a registered tool."""
-
-    name: str
-    arguments: object
-
-
-@dataclass(frozen=True)
-class AgentMessage:
-    """One message in an agent turn transcript."""
-
-    role: str
-    content: str
-    tool_name: str | None = None
-    tool_result: ToolExecutionResult | None = None
-
-
-@dataclass(frozen=True)
-class AgentModelResponse:
-    """One model step: assistant text and optional single tool proposal."""
-
-    content: str
-    tool_call: ToolCallProposal | None = None
+# Re-export neutral contracts for backward-compatible imports.
+__all__ = [
+    "AgentMessage",
+    "AgentModel",
+    "AgentModelResponse",
+    "AgentService",
+    "AgentTurnResult",
+    "LLMServiceAgentModel",
+    "ToolCallProposal",
+]
 
 
 @dataclass(frozen=True)
@@ -55,23 +45,6 @@ class AgentTurnResult:
     tool_results: tuple[ToolExecutionResult, ...]
     tool_steps_used: int
     stopped_reason: str
-
-
-class AgentModel(Protocol):
-    """
-    Provider-neutral model step interface used by AgentService.
-
-    Concrete LLM vendors adapt their APIs behind this protocol.
-    """
-
-    def complete(
-        self,
-        messages: Sequence[AgentMessage],
-        *,
-        tools: Sequence[ToolDefinition] | None = None,
-    ) -> AgentModelResponse:
-        """Return the next assistant step for the given transcript."""
-        ...
 
 
 class LLMServiceAgentModel:
@@ -136,7 +109,11 @@ class AgentService:
                 tools=tool_definitions,
             )
             messages.append(
-                AgentMessage(role="assistant", content=response.content)
+                AgentMessage(
+                    role="assistant",
+                    content=response.content,
+                    tool_call_proposal=response.tool_call,
+                )
             )
 
             if response.tool_call is None:
@@ -169,6 +146,7 @@ class AgentService:
                     role="tool",
                     content=_tool_result_content(execution),
                     tool_name=execution.tool_name,
+                    tool_call_id=response.tool_call.call_id,
                     tool_result=execution,
                 )
             )
