@@ -111,9 +111,9 @@ class RealRoadmapVerifiedStateTests(unittest.TestCase):
     def test_total_numbered_steps_derived_from_roadmap(self):
         self.assertEqual(len(self.steps), 40)
 
-    def test_completed_numbered_steps_is_31(self):
+    def test_completed_numbered_steps_is_32(self):
         completed = sum(1 for step in self.steps if step.completed)
-        self.assertEqual(completed, 31)
+        self.assertEqual(completed, 32)
 
     def test_only_four_stages_in_phase_1(self):
         self.assertEqual(len(self.phases), 4)
@@ -133,14 +133,14 @@ class RealRoadmapVerifiedStateTests(unittest.TestCase):
     def test_phase_4_existing_core_alignment_in_progress(self):
         phase = self.phases[4]
         self.assertEqual(phase.name, "Existing Core Alignment")
-        self.assertEqual((phase.completed, phase.total), (1, 10))
+        self.assertEqual((phase.completed, phase.total), (2, 10))
 
-    def test_next_incomplete_is_base_character_domain_refactor(self):
+    def test_next_incomplete_is_dnd_character_profile_extraction(self):
         nxt = next_incomplete(self.steps)
         self.assertIsNotNone(nxt)
         self.assertEqual(nxt.phase, 4)
-        self.assertEqual(nxt.step, 2)
-        self.assertEqual(nxt.title, "Base Character Domain Refactor")
+        self.assertEqual(nxt.step, 3)
+        self.assertEqual(nxt.title, "D&D Character Profile Extraction")
 
 
 if __name__ == "__main__":
